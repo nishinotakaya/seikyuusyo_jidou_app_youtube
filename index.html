@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>請求書管理 - PDF一覧</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app finder-layout">
+    <!-- サイドバー（Finder風） -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2 class="sidebar-title">場所</h2>
+      </div>
+      <nav class="sidebar-nav">
+        <button type="button" class="sidebar-item active" data-folder-id="all" title="すべて">
+          <span class="sidebar-icon">📂</span>
+          <span class="sidebar-label">すべて</span>
+        </button>
+        <button type="button" class="sidebar-item" data-folder-id="null" title="未分類">
+          <span class="sidebar-icon">📁</span>
+          <span class="sidebar-label">未分類</span>
+        </button>
+        <div class="sidebar-divider"></div>
+        <div id="folderList" class="folder-list">
+          <!-- ユーザー作成フォルダはJSで生成 -->
+        </div>
+        <button type="button" id="addFolderBtn" class="sidebar-item add-folder-btn" title="新規フォルダ">
+          <span class="sidebar-icon">➕</span>
+          <span class="sidebar-label">新規フォルダ</span>
+        </button>
+      </nav>
+    </aside>
+
+    <!-- メインコンテンツ -->
+    <main class="main-content">
+      <!-- ツールバー -->
+      <div class="toolbar">
+        <div id="breadcrumb" class="breadcrumb">
+          <span class="breadcrumb-item current">すべて</span>
+        </div>
+        <div class="toolbar-actions">
+          <div class="search-bar compact">
+            <span class="search-icon">🔍</span>
+            <input type="search" id="searchInput" class="search-input" placeholder="検索..." autocomplete="off">
+            <button type="button" id="clearSearch" class="clear-search" title="クリア" hidden>×</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ドロップゾーン -->
+      <div id="dropZone" class="drop-zone">
+        <div class="drop-zone-content">
+          <div class="drop-icon">📥</div>
+          <p class="drop-text">PDFをここにドラッグ＆ドロップ</p>
+          <p class="drop-hint">または クリックして選択</p>
+          <input type="file" id="fileInput" accept="application/pdf" multiple hidden>
+        </div>
+      </div>
+
+      <!-- パス表示・件数・合計 -->
+      <div class="list-header">
+        <span id="countBadge" class="count-badge">0件</span>
+        <span id="totalAmount" class="total-amount">合計: —</span>
+      </div>
+
+      <!-- PDF・フォルダ一覧（グリッド表示） -->
+      <div id="contentGrid" class="content-grid">
+        <!-- アイテムはJSで動的生成 -->
+      </div>
+
+      <!-- ページネーション -->
+      <div id="pagination" class="pagination" hidden>
+        <button type="button" id="prevPage" class="btn-page" disabled>‹ 前へ</button>
+        <span id="pageInfo" class="page-info">1 / 1</span>
+        <button type="button" id="nextPage" class="btn-page">次へ ›</button>
+      </div>
+
+      <!-- 空状態 -->
+      <div id="emptyState" class="empty-state">
+        <p class="empty-icon">📁</p>
+        <p class="empty-text">PDFがまだありません</p>
+        <p class="empty-hint">上のエリアにPDFをドラッグ＆ドロップして追加</p>
+      </div>
+      <div id="noResultsState" class="empty-state" hidden>
+        <p class="empty-icon">🔍</p>
+        <p class="empty-text">検索結果がありません</p>
+      </div>
+    </main>
+  </div>
+
+  <!-- PDF詳細モーダル -->
+  <div id="viewerModal" class="modal viewer-modal" hidden>
+    <div class="modal-backdrop viewer-backdrop"></div>
+    <div class="viewer-modal-content">
+      <div class="viewer-header">
+        <h3 id="viewerTitle" class="viewer-title">請求書</h3>
+        <button type="button" id="closeViewer" class="btn-close-viewer" title="閉じる">×</button>
+      </div>
+      <div class="viewer-body">
+        <iframe id="pdfViewer" class="pdf-viewer-iframe" title="PDFビューアー"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- 名前編集モーダル -->
+  <div id="editModal" class="modal" hidden>
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <h3 class="modal-title">ファイル名を編集</h3>
+      <input type="text" id="editInput" class="edit-input" placeholder="名前を入力">
+      <div class="modal-actions">
+        <button type="button" id="cancelEdit" class="btn btn-secondary">キャンセル</button>
+        <button type="button" id="saveEdit" class="btn btn-primary">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- フォルダ作成・編集モーダル -->
+  <div id="folderModal" class="modal" hidden>
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <h3 id="folderModalTitle" class="modal-title">新規フォルダ</h3>
+      <input type="text" id="folderInput" class="edit-input" placeholder="フォルダ名を入力">
+      <div class="modal-actions">
+        <button type="button" id="cancelFolder" class="btn btn-secondary">キャンセル</button>
+        <button type="button" id="saveFolder" class="btn btn-primary">作成</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- フォルダ移動モーダル -->
+  <div id="moveModal" class="modal" hidden>
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <h3 class="modal-title">フォルダに移動</h3>
+      <p class="move-target-name" id="moveTargetName"></p>
+      <ul id="moveFolderList" class="move-folder-list"></ul>
+      <div class="modal-actions">
+        <button type="button" id="cancelMove" class="btn btn-secondary">キャンセル</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
