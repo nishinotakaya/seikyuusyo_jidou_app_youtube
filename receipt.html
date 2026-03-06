@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>レシート読み取り・割り勘 | 請求書管理</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="receipt.css">
+</head>
+<body class="receipt-page">
+  <div class="receipt-app">
+    <header class="receipt-header">
+      <a href="index.html" class="back-link">← 請求書一覧へ</a>
+      <h1 class="receipt-title">🧾 レシート読み取り・割り勘</h1>
+    </header>
+
+    <main class="receipt-main">
+      <!-- Step 1: カメラ起動 -->
+      <section id="stepCamera" class="receipt-section">
+        <h2>1. レシートを撮影</h2>
+        <button type="button" id="startCameraBtn" class="btn btn-primary btn-large">
+          📷 カメラを起動する
+        </button>
+        <div id="cameraArea" class="camera-area" hidden>
+          <video id="video" class="camera-video" autoplay playsinline muted></video>
+          <button type="button" id="captureBtn" class="btn btn-primary capture-btn">📸 読み取る</button>
+          <button type="button" id="stopCameraBtn" class="btn btn-secondary">カメラを止める</button>
+        </div>
+        <p id="cameraError" class="error-msg" hidden></p>
+      </section>
+
+      <!-- Step 2: 読み取り結果・割り勘入力 -->
+      <section id="stepSplit" class="receipt-section" hidden>
+        <h2>2. 読み取り結果と割り勘</h2>
+        <div id="receiptResult" class="receipt-result">
+          <p id="receiptTotal" class="receipt-total">合計: —</p>
+          <p id="receiptDetail" class="receipt-detail"></p>
+        </div>
+
+        <div class="split-form">
+          <h3>人数・割合を入力</h3>
+          <div class="split-row">
+            <label>男性</label>
+            <input type="number" id="maleCount" class="split-input" min="0" value="0" placeholder="人数"> 人
+            <input type="number" id="maleRatio" class="split-input" min="0" max="100" value="50" placeholder="割合"> ％
+          </div>
+          <div class="split-row">
+            <label>女性</label>
+            <input type="number" id="femaleCount" class="split-input" min="0" value="0" placeholder="人数"> 人
+            <input type="number" id="femaleRatio" class="split-input" min="0" max="100" value="50" placeholder="割合"> ％
+          </div>
+          <button type="button" id="calcBtn" class="btn btn-primary btn-large">💰 割り勘を計算</button>
+        </div>
+
+        <div id="splitResult" class="split-result" hidden>
+          <h3>割り勘結果</h3>
+          <div id="splitResultBody"></div>
+          <button type="button" id="resetBtn" class="btn btn-secondary">もう一度撮影</button>
+        </div>
+      </section>
+
+      <p id="apiError" class="error-msg" hidden></p>
+      <p id="loadingMsg" class="loading-msg" hidden>読み取り中…</p>
+    </main>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="receipt.js"></script>
+</body>
+</html>

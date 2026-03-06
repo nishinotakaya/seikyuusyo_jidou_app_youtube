@@ -1,0 +1,211 @@
+/* レシート読み取り・割り勘ページ */
+.receipt-page {
+  background: #f5f5f7;
+  min-height: 100vh;
+}
+
+.receipt-app {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 20px 16px 40px;
+  font-family: 'Noto Sans JP', sans-serif;
+}
+
+.receipt-header {
+  margin-bottom: 24px;
+}
+
+.back-link {
+  display: inline-block;
+  font-size: 0.9rem;
+  color: #007aff;
+  text-decoration: none;
+  margin-bottom: 8px;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+.receipt-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #1d1d1f;
+}
+
+.receipt-main {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.receipt-section {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.receipt-section h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #1d1d1f;
+}
+
+.receipt-section h3 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 16px 0 10px;
+  color: #333;
+}
+
+.btn-large {
+  width: 100%;
+  padding: 14px 20px;
+  font-size: 1rem;
+}
+
+.camera-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.camera-video {
+  width: 100%;
+  max-width: 480px;
+  border-radius: 8px;
+  background: #000;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+}
+
+.capture-btn {
+  padding: 12px 24px;
+  font-size: 1rem;
+}
+
+.error-msg {
+  color: #ff3b30;
+  font-size: 0.9rem;
+  margin-top: 8px;
+}
+
+.loading-msg {
+  text-align: center;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.receipt-result {
+  background: #f8f8f8;
+  border-radius: 8px;
+  padding: 14px;
+  margin-bottom: 16px;
+}
+
+.receipt-total {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #007aff;
+  margin-bottom: 8px;
+}
+
+.receipt-detail {
+  font-size: 0.9rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.receipt-detail small {
+  color: #666;
+}
+
+.split-form .split-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.split-form .split-row label {
+  min-width: 48px;
+  font-weight: 500;
+}
+
+.split-input {
+  width: 72px;
+  padding: 10px 12px;
+  font-size: 1rem;
+  border: 1px solid #d1d1d6;
+  border-radius: 8px;
+}
+
+.split-result {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.split-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+}
+
+.split-table th,
+.split-table td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.split-table th {
+  font-weight: 600;
+  color: #333;
+  width: 30%;
+}
+
+.split-table td {
+  color: #1d1d1f;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  color: #1d1d1f;
+  text-decoration: none;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s ease;
+  box-sizing: border-box;
+}
+
+.sidebar-link:hover {
+  background: #dcdcdc;
+}
+
+.sidebar-link .sidebar-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.sidebar-link .sidebar-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
