@@ -10,10 +10,23 @@
 
   const banner = document.createElement('div');
   banner.className = 'line-browser-banner';
+  const currentUrl = location.href;
+  const isAndroid = /Android/i.test(ua);
+  let openChromeBtn = '';
+  if (isAndroid) {
+    const intentUrl = 'intent://' + location.host + (location.pathname || '') + (location.search || '') + '#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=' + encodeURIComponent(currentUrl) + ';end';
+    openChromeBtn = '<a href="' + intentUrl.replace(/"/g, '&quot;') + '" class="line-banner-btn">Chromeで開く</a>';
+  } else {
+    openChromeBtn = '<a href="' + currentUrl + '" target="_blank" class="line-banner-btn">ブラウザで開く</a>';
+  }
+
   banner.innerHTML = `
     <div class="line-banner-inner">
       <p class="line-banner-text">📱 カメラ・ファイル機能を使うには、ブラウザで開いてください</p>
-      <p class="line-banner-hint">Line → 右上の ︙ メニュー → 「ブラウザで開く」をタップ</p>
+      <div class="line-banner-actions">
+        ${openChromeBtn}
+        <span class="line-banner-or">または 右上 ︙ → 「ブラウザで開く」</span>
+      </div>
       <button type="button" class="line-banner-close" aria-label="閉じる">×</button>
     </div>
   `;
@@ -34,8 +47,21 @@
       font-size: 14px;
     }
     .line-banner-inner { position: relative; padding-right: 32px; }
-    .line-banner-text { margin: 0 0 4px; font-weight: 600; }
-    .line-banner-hint { margin: 0; opacity: 0.95; font-size: 12px; }
+    .line-banner-text { margin: 0 0 8px; font-weight: 600; }
+    .line-banner-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+    .line-banner-btn {
+      display: inline-block;
+      padding: 8px 16px;
+      background: #fff;
+      color: #00B900;
+      font-weight: 600;
+      font-size: 13px;
+      text-decoration: none;
+      border-radius: 8px;
+      white-space: nowrap;
+    }
+    .line-banner-btn:hover { background: #f0fff0; }
+    .line-banner-or { font-size: 11px; opacity: 0.9; }
     .line-banner-close {
       position: absolute;
       top: -8px;
@@ -55,7 +81,7 @@
     }
     .line-banner-close:hover { background: rgba(255,255,255,0.5); }
     body { padding-top: 0 !important; }
-    body.line-banner-visible { padding-top: 72px !important; }
+    body.line-banner-visible { padding-top: 88px !important; }
   `;
   document.head.appendChild(style);
   document.body.insertBefore(banner, document.body.firstChild);
