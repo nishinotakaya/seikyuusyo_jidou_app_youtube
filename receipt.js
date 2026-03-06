@@ -33,18 +33,36 @@ function getConfig() {
 
 async function startCamera() {
   cameraError.hidden = true;
-  try {
-    stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } },
-      audio: false,
-    });
-    video.srcObject = stream;
-    startCameraBtn.hidden = true;
-    cameraArea.hidden = false;
-  } catch (err) {
-    cameraError.textContent = 'カメラを起動できません: ' + (err.message || '権限を許可してください');
-    cameraError.hidden = false;
+  startCameraBtn.disabled = true;
+
+  const constraintsList = [
+    { video: { facingMode: 'environment' }, audio: false },
+    { video: { facingMode: 'user' }, audio: false },
+    { video: true, audio: false },
+  ];
+
+  for (const constraints of constraintsList) {
+    try {
+      stream = await navigator.mediaDevices.getUserMedia(constraints);
+      video.srcObject = stream;
+      startCameraBtn.hidden = true;
+      cameraArea.hidden = false;
+      startCameraBtn.disabled = false;
+      return;
+    } catch (e) {
+      if (stream) {
+        stream.getTracks().forEach((t) => t.stop());
+        stream = null;
+      }
+    }
   }
+
+  const errMsg = navigator.mediaDevices == null
+    ? 'このブラウザはカメラに対応していません。Chrome等を利用してください。'
+    : 'カメラを起動できません。設定でカメラの許可を確認するか、HTTPSのページで開いてください。';
+  cameraError.textContent = errMsg;
+  cameraError.hidden = false;
+  startCameraBtn.disabled = false;
 }
 
 function stopCamera() {
