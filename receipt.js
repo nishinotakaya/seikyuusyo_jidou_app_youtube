@@ -233,9 +233,9 @@ function onReset() {
   stepSplit.hidden = true;
   splitResult.hidden = true;
   maleCount.value = '0';
-  maleRatio.value = '50';
+  maleRatio.value = '80';
   femaleCount.value = '0';
-  femaleRatio.value = '50';
+  femaleRatio.value = '20';
   startCameraBtn.hidden = false;
 }
 
